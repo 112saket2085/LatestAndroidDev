@@ -18,12 +18,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import com.example.testapp.viewmodel.LoginViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.testapp.apis.ResponseStates
+import com.example.testapp.extensions.showToastMessage
 import com.example.testapp.model.LoginResponse
 
 @Composable
@@ -32,6 +34,7 @@ fun LoginScreen(
     modifier: Modifier,
     viewModel: LoginViewModel = viewModel(factory = factory)
 ) {
+    val context = LocalContext.current
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -68,12 +71,11 @@ fun LoginScreen(
         Button(
             onClick = {
                 // Handle login logic here
-                println("Login attempt with Username: $username, Password: $password")
-                viewModel.makeLoginApiCall(
-                    userName = username,
-                    password = password
-                )
-            }, modifier = Modifier.fillMaxWidth()
+                if (isValidInput(username, password)) viewModel.makeLoginApiCall(
+                    userName = username, password = password
+                ) else context.showToastMessage("Please enter valid username and password")
+            },
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text("Submit")
         }
@@ -81,11 +83,15 @@ fun LoginScreen(
     }
 }
 
+private fun isValidInput(userName: String, password: String) =
+    userName.isNotEmpty() && password.isNotEmpty()
+
 @Composable
 fun HandleResponse(response: ResponseStates<LoginResponse>) {
-    when(response) {
-       is ResponseStates.Loading -> Text("Loading....")
-       is ResponseStates.Success -> Text(response.data.message)
-       is ResponseStates.Error -> Text(response.error.message.toString())
+    when (response) {
+        is ResponseStates.Loading -> Text("Loading....")
+        is ResponseStates.Success -> Text(response.data.message)
+        is ResponseStates.Error -> Text(response.error.message.toString())
+        else -> Text("")
     }
 }

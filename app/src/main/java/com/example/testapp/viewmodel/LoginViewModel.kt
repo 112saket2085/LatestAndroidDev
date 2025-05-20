@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(private val repository: LoginRepository) : ViewModel() {
 
-    private val _loginStateFlow  = MutableStateFlow<ResponseStates<LoginResponse>>(ResponseStates.Loading)
+    private val _loginStateFlow  = MutableStateFlow<ResponseStates<LoginResponse>>(ResponseStates.Init)
     val loginStateFlow = _loginStateFlow.asStateFlow()
 
     fun makeLoginApiCall(userName: String, password: String) {
