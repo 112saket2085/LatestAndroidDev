@@ -11,17 +11,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.testapp.screen.LoginScreen
 import com.example.testapp.ui.theme.TestAppTheme
+import dagger.android.AndroidInjection
+import javax.inject.Inject
+import javax.inject.Provider
 
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var viewModelFactory: Provider<ViewModelProvider.Factory>
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             TestAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    LoginScreen( modifier = Modifier.padding(innerPadding))
+                    LoginScreen(factory = viewModelFactory.get(), modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -32,6 +40,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     TestAppTheme {
-        LoginScreen( modifier = Modifier.padding(16.dp))
+        LoginScreen(factory = viewModelFactory {  }, modifier = Modifier.padding(16.dp))
     }
 }

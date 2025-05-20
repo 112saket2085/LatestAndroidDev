@@ -4,8 +4,11 @@ import com.example.testapp.model.LoginResponse
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class LoginRepository {
+@Singleton
+class LoginRepository @Inject constructor() {
 
     fun callLoginApi(userName: String, password: String) : Flow<ResponseStates<LoginResponse>> {
         return flow {

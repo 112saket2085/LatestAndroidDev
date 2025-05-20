@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
 import com.example.testapp.viewmodel.LoginViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.testapp.apis.ResponseStates
@@ -27,8 +28,9 @@ import com.example.testapp.model.LoginResponse
 
 @Composable
 fun LoginScreen(
+    factory: ViewModelProvider.Factory,
     modifier: Modifier,
-    viewModel: LoginViewModel = viewModel()
+    viewModel: LoginViewModel = viewModel(factory = factory)
 ) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }

@@ -9,10 +9,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel() : ViewModel() {
-
-    private val repository  = LoginRepository()
+class LoginViewModel @Inject constructor(private val repository: LoginRepository) : ViewModel() {
 
     private val _loginStateFlow  = MutableStateFlow<ResponseStates<LoginResponse>>(ResponseStates.Loading)
     val loginStateFlow = _loginStateFlow.asStateFlow()
